@@ -4,7 +4,7 @@ provider "aws" {
 
 
 resource "aws_instance" "web" {
-    ami = data.aws_ami.amazan_ami
+    ami = data.aws_ami.amazon_ami
     instance_type = var.instance_type
     availability_zone = var.az
     key_name = "my-laptop-key"
