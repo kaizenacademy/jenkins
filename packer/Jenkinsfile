@@ -19,14 +19,17 @@ def buildNUMBER = env.BUILD_NUMBER
 
 if (env.BRANCH_NAME == "main") {
     hello = "us-east-1"
+    kaizen = "t2.micro"
 }
 
 else if (env.BRANCH_NAME == "qa") {
     hello = "us-east-2"
+    kaizen = "t3.micro"
 }
 
 else if (env.BRANCH_NAME == "dev") {
     hello = "us-west-1"
+    kaizen = "t2.small"
 }
 
 else {
@@ -49,6 +52,14 @@ withCredentials([usernamePassword(credentialsId: 'aws-creds', passwordVariable: 
     packer init .
     packer build -var jenkins_build_number=${buildNUMBER} packer.pkr.hcl
     """
+    build job: 'hello-world',
+    parameters: [
+        string(name: 'action', value: 'apply'), 
+        string(name: 'region', value: "${hello}"), 
+        string(name: 'ami_id', value: "my-ami-${buildNUMBER}"), 
+        string(name: 'az', value: "${hello}b"), 
+        string(name: 'type', value: "${kaizen}")
+        ]
 }
 }
 }
