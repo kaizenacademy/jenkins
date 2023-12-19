@@ -64,7 +64,7 @@ build {
   provisioner "shell" {
     inline = [
       "sudo apt update",
-      "sudo apt-get upgrade -y",
+      "sudo apt install -y apache2-bin apache2-utils",
       "sudo apt install apache2 -y",
       "sudo systemctl start apache2",
       "sudo systemctl enable apache2"
