@@ -30,12 +30,12 @@ variable "source_ami_filter" {
 
 variable "instance_type" {
   type    = string
-  default = ""
+  default = "t2.micro"
 }
 
 variable "jenkins_build_number" {
   type    = string
-  default = "t2.micro"
+  default = ""
 }
 
 source "amazon-ebs" "example" {
