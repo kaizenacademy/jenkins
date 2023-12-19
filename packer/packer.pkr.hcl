@@ -25,7 +25,7 @@ variable "aws_region" {
 
 variable "source_ami_filter" {
   type    = string
-  default = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
+  default = "amzn2-ami-hvm-*-gp2"
 }
 
 variable "instance_type" {
@@ -43,7 +43,7 @@ source "amazon-ebs" "example" {
   secret_key    = var.aws_secret_key
   region        = var.aws_region
   instance_type = var.instance_type
-  ssh_username  = "ubuntu"
+  ssh_username  = "ec2-user"
   ami_name = "my-ami-${var.jenkins_build_number}"
 
   source_ami_filter {
@@ -51,7 +51,7 @@ source "amazon-ebs" "example" {
       name               = var.source_ami_filter
       "virtualization-type" = "hvm"
     }
-    owners = ["099720109477"]
+    owners = ["137112412989"]
     most_recent = true
   }
 }
@@ -63,11 +63,9 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sudo add-apt-repository universe",
-      "sudo apt update",
-      "sudo apt install apache2 -y",
-      "sudo systemctl start apache2",
-      "sudo systemctl enable apache2"
+      "sudo yum install httpd -y",
+      "sudo systemctl start httpd",
+      "sudo systemctl enable httpd"
     ]
   }
 }
