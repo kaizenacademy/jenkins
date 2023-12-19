@@ -16,6 +16,29 @@ spec:
 
 def buildNUMBER = env.BUILD_NUMBER
 
+properties([
+    parameters([
+        choice(choices: ['dev', 'qa', 'stage', 'prod'], description: 'Pick a region', name: 'region')
+        ])
+        ])
+
+if (params.region == "dev") {
+    hello = "us-east-1"
+}
+
+else if (params.region == "qav") {
+    hello = "us-east-2"
+}
+
+else if (params.region == "stage") {
+    hello = "us-west-1"
+}
+
+else {
+    hello = "us-west-2"
+}
+
+
 podTemplate(cloud: 'kubernetes', label: 'packer', showRawYaml: false, yaml: template){
 node("packer"){
 container("packer"){
@@ -24,7 +47,7 @@ stage ("Checkout SCM") {
     }
 
 withCredentials([usernamePassword(credentialsId: 'aws-creds', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-    withEnv(['AWS_REGION=us-east-2']) {
+    withEnv(["AWS_REGION=${hello}"]) {
     stage ("Packer build") {
     sh """
     cd packer
