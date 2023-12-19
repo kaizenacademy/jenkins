@@ -4,8 +4,17 @@ provider "aws" {
 
 
 resource "aws_instance" "web" {
-    ami = var.ami_id
+    ami = var.ami_name
     instance_type = var.instance_type
     availability_zone = var.az
     key_name = "my-laptop-key"
+}
+
+data "aws_ami" "amazon_ami" {
+  most_recent = true
+  filter {
+    name   = "name"
+    values = [var.ami_name]
+  }
+  owners = ["self"]
 }
